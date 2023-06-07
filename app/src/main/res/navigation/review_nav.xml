@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/review_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.info_6130.ui.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_criticDetailsFragment22"
+            app:destination="@id/criticDetailsFragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/criticDetailsFragment2"
+        android:name="com.example.info_6130.ui.fragments.CriticDetailsFragment"
+        android:label="fragment_critic_details"
+        tools:layout="@layout/fragment_critic_details" >
+        <argument
+            android:name="critic"
+            app:argType="com.example.info_6130.dataModel.CriticDetails" />
+    </fragment>
+</navigation>
