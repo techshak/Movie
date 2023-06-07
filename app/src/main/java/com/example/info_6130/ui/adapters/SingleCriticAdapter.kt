@@ -15,15 +15,15 @@ class SingleCriticAdapter(private val actions: SingleCriticActions):RecyclerView
     inner class SingleCriticViewHolder(private val binding: SingleCriticCardBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(critic:Result){
             binding.criticName.text = critic.display_name
-            binding.criticStatus.text = critic.status
+            if (critic.status.isNotEmpty()){ binding.criticStatus.text = critic.status }
             binding.root.setOnClickListener {
                 val image = critic.multimedia?.resource?.src
                 actions.onOptionItemClicked(CriticDetails(image,critic.bio,critic.sort_name))
             }
             if(critic.multimedia !== null){
-
                 Picasso.get()
                     .load(critic.multimedia.resource?.src)
+                    .fit()
                     .into(binding.CriticImage)
             }
 

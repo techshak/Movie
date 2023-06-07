@@ -2,21 +2,17 @@ package com.example.info_6130.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.info_6130.MainActivity
-import com.example.info_6130.R
-import com.example.info_6130.ReviewActivity
 import com.example.info_6130.dataModel.CriticDetails
-import com.example.info_6130.dataModel.CriticsResponse
-import com.example.info_6130.dataModel.Result
 import com.example.info_6130.databinding.FragmentHomeBinding
 import com.example.info_6130.network.RetrofitInstance
 import com.example.info_6130.repository.BaseRepository
@@ -50,7 +46,8 @@ class HomeFragment : Fragment(), SingleCriticActions {
         val baseRepository = BaseRepository(retrofit)
         val reviewViewModelProviderFactory = ReviewViewModelProviderFactory(baseRepository)
         viewModel = ViewModelProvider(this,reviewViewModelProviderFactory)[ReviewViewModel::class.java]
-        viewModel.getCritics()
+
+        lifecycleScope.launchWhenCreated { viewModel.getCritics() }
 
 
         binding.backArrow.setOnClickListener {
@@ -62,24 +59,21 @@ class HomeFragment : Fragment(), SingleCriticActions {
             when (response) {
                 is Resource.Success -> {
                     response.data?.let { critics ->
-//                        binding.allPostPb.visibility = View.INVISIBLE
-                        // submit the fetched critics to the differ in the
+                        binding.getCriticsProgressBar.visibility = View.INVISIBLE
+                        // submit the fetched critics to the differ in the adapter
                         setupRecyclerView()
                         singleCriticAdapter.differ.submitList(critics.results)
-//                        if (post.isEmpty()) {
-//                            binding.noPosts.visibility = View.VISIBLE
-//                        }
                     }
                 }
                 is Resource.Error -> {
                     response.message?.let { message ->
-//                        binding.allPostPb.visibility = View.INVISIBLE
-                        Log.d("All Posts Fragment", "Fetch error:$message")
+                        binding.getCriticsProgressBar.visibility = View.INVISIBLE
+                        Toast.makeText(requireContext(), "Fetch error:$message",Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading -> {
                     //show the user the progress bar so they know the call is being made
-//                    binding.allPostPb.visibility = View.VISIBLE
+                    binding.getCriticsProgressBar.visibility = View.VISIBLE
                 }
             }
         }
@@ -93,8 +87,8 @@ class HomeFragment : Fragment(), SingleCriticActions {
         }
     }
 
-    override fun onOptionItemClicked(critic: CriticDetails) {
-        val directions = HomeFragmentDirections.actionHomeFragmentToCriticDetailsFragment22(critic)
+    override fun onOptionItemClicked(criticDetails: CriticDetails) {
+        val directions = HomeFragmentDirections.actionHomeFragmentToCriticDetailsFragment22(criticDetails)
         findNavController().navigate(directions)
     }
 

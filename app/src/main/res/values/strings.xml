@@ -3,4 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="go_To_ReviewActivity">Next</string>
+    <string name="no_bio_provided">No bio provided</string>
+    <string name="reviewed_movies">Reviewed Movies</string>
+    <string name="critic_image">Critic Image</string>
 </resources>

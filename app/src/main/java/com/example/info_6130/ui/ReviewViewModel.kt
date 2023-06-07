@@ -31,7 +31,6 @@ class ReviewViewModel (private val baseRepository: BaseRepository):ViewModel(){
     fun getCriticReviews(name:String) = viewModelScope.launch (Dispatchers.IO){
         _allCriticMovies.postValue(Resource.Loading())
         val criticsMovies = baseRepository.getCriticReviews(name)
-//        Log.d("VVVVV",criticsMovies.body()?.results.toString())
         _allCriticMovies.postValue(handleCriticMovies(criticsMovies))
     }
 private fun handleCriticList(critics: Response<CriticsResponse>): Resource<CriticsResponse> {
