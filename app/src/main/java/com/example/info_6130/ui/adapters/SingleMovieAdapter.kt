@@ -7,13 +7,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.info_6130.dataModel.CriticDetails
 import com.example.info_6130.dataModel.reviews.Result
 import com.example.info_6130.databinding.MovieReviewCardBinding
 import com.squareup.picasso.Picasso
 
-class SingleMovieAdapter : RecyclerView.Adapter<SingleMovieAdapter.SingleMovieViewHolder>() {
+class SingleMovieAdapter(private val actions: SingleMovieActions) : RecyclerView.Adapter<SingleMovieAdapter.SingleMovieViewHolder>() {
     inner class SingleMovieViewHolder(private val binding: MovieReviewCardBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(result: Result) {
+                binding.root.setOnClickListener {
+                    actions.onMovieItemClicked(result.link.url)
+                }
                 if(result.mpaa_rating.isNotEmpty()){ binding.mpaaRating.visibility = View.VISIBLE}
                 binding.mpaaRating.text = result.mpaa_rating
                 binding.moviePickValue.text = result.critics_pick.toString()
@@ -51,4 +55,8 @@ class SingleMovieAdapter : RecyclerView.Adapter<SingleMovieAdapter.SingleMovieVi
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+}
+
+interface SingleMovieActions {
+    fun onMovieItemClicked(link:String)
 }

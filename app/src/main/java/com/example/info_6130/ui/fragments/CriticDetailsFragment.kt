@@ -3,33 +3,30 @@ package com.example.info_6130.ui.fragments
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.text.HtmlCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.info_6130.R
 import com.example.info_6130.dataModel.CriticDetails
 import com.example.info_6130.databinding.FragmentCriticDetailsBinding
-import com.example.info_6130.databinding.FragmentHomeBinding
 import com.example.info_6130.network.RetrofitInstance
 import com.example.info_6130.repository.BaseRepository
 import com.example.info_6130.ui.ReviewViewModel
 import com.example.info_6130.ui.ReviewViewModelProviderFactory
-import com.example.info_6130.ui.adapters.SingleCriticAdapter
+import com.example.info_6130.ui.adapters.SingleMovieActions
 import com.example.info_6130.ui.adapters.SingleMovieAdapter
 import com.example.info_6130.utils.Resource
 import com.squareup.picasso.Picasso
 import retrofit2.Retrofit
 
-class CriticDetailsFragment : Fragment() {
+class CriticDetailsFragment : Fragment(),SingleMovieActions {
 
     private lateinit var binding: FragmentCriticDetailsBinding
     private val args: CriticDetailsFragmentArgs by navArgs()
@@ -93,10 +90,16 @@ class CriticDetailsFragment : Fragment() {
     }
 
     private fun setupRecyclerView(){
-        singleMovieAdapter = SingleMovieAdapter()
+        singleMovieAdapter = SingleMovieAdapter(this)
         binding.reviewedMovies.apply {
             adapter = singleMovieAdapter
         }
+    }
+
+    override fun onMovieItemClicked(link: String) {
+        val bundle = Bundle()
+        bundle.putString("link", link)
+       findNavController().navigate(R.id.webViewFragment,bundle)
     }
 
 }
